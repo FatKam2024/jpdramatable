@@ -52,3 +52,37 @@ body {
 .time-slot:hover a {
     color: #00796b;
 }
+
+.resource-section {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resource-section h2 {
+    background-color: #ececec;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    margin: -10px -10px 10px -10px;
+}
+
+.resource-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.resource-section ul li {
+    margin-bottom: 10px;
+}
+
+.resource-section ul li a {
+    text-decoration: none;
+    color: #00796b;
+    transition: color 0.3s;
+}
+
+.resource-section ul li a:hover {
+    color: #004d40;
+}
