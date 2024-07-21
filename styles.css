@@ -28,12 +28,6 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
-.highlight-today {
-    background-color: #ffeb3b; /* Yellow background */
-    border-radius: 8px 8px 0 0; /* Matching the header style */
-    color: #000; /* Black text color */
-}
-
 .time-slot {
     background-color: #f9f9f9;
     margin-bottom: 10px;
