@@ -17,11 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
             results.data.forEach(row => {
                 console.log("Processing row:", row);  // Debug: Log each row
                 const day = row.Weekday;
-                if (day && row.Time && row.Channel && row.ChannelLink && row.ProgramName && row.Link) {
+                if (day && row.Time && row.Channel && row.ProgramName) {
                     scheduleData[day].push({
                         time: row.Time,
                         channel: row.Channel,
-                        channelLink: row.ChannelLink,
                         show: row.ProgramName,
                         link: row.Link
                     });
@@ -32,13 +31,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dayColumn = document.getElementById(day);
                 if (dayColumn) {
                     console.log("Updating day column:", day);  // Debug: Log day column update
-                    dayColumn.innerHTML += scheduleData[day].map(slot => 
-                        `<div class="time-slot">
-                            <a href="${slot.link}" target="_blank">${slot.time} 
-                                <a href="${slot.channelLink}" target="_blank">${slot.channel}</a>
-                                <br>${slot.show}</a>
-                        </div>`
-                    ).join('');
+                    dayColumn.innerHTML += scheduleData[day].map(slot => {
+                        if (slot.link) {
+                            return `<div class="time-slot">
+                                        <a href="${slot.link}" target="_blank">${slot.time} ${slot.channel}<br>${slot.show}</a>
+                                    </div>`;
+                        } else {
+                            return `<div class="time-slot">
+                                        ${slot.time} ${slot.channel}<br>${slot.show}
+                                    </div>`;
+                        }
+                    }).join('');
                 }
             }
         }
