@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.schedule-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.day-column {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    flex: 1;
+    max-width: 13%;
+    text-align: center;
+}
+
+.day-column h2 {
+    background-color: #ececec;
+    margin: 0 -10px 10px;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+}
+
+.highlight-today {
+    background-color: #ffeb3b; /* Yellow background */
+    border-radius: 8px 8px 0 0; /* Matching the header style */
+    color: #000; /* Black text color */
+}
+
+.time-slot {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.time-slot a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: color 0.3s;
+}
+
+.time-slot:hover {
+    background-color: #e0f7fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.time-slot:hover a {
+    color: #00796b;
+}
