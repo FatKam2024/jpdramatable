@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Highlight the current day column
+    const today = new Date().getDay(); // Sunday - Saturday : 0 - 6
+    const dayMap = {
+        0: 'day7', // Sunday
+        1: 'day1', // Monday
+        2: 'day2', // Tuesday
+        3: 'day3', // Wednesday
+        4: 'day4', // Thursday
+        5: 'day5', // Friday
+        6: 'day6'  // Saturday
+    };
+    const currentDayColumn = document.getElementById(dayMap[today]);
+    if (currentDayColumn) {
+        currentDayColumn.classList.add('current-day');
+    }
+
     Papa.parse('schedule.csv', {
         download: true,
         header: true,
