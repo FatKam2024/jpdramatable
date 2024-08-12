@@ -5,6 +5,7 @@ body {
     padding: 20px;
 }
 
+/* General Styles */
 h1 {
     text-align: center;
     margin-bottom: 20px;
@@ -12,6 +13,7 @@ h1 {
 
 .schedule-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 10px;
 }
@@ -94,4 +96,42 @@ h1 {
 
 .resource-section ul li a:hover {
     color: #004d40;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .schedule-container {
+        flex-direction: column;
+    }
+
+    .day-column {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .day-column {
+        padding: 5px;
+    }
+
+    .time-slot {
+        padding: 5px;
+    }
+
+    .resource-section h2 {
+        font-size: 1.2em;
+    }
+
+    .resource-section ul li a {
+        font-size: 1em;
+    }
 }
