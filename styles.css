@@ -40,7 +40,7 @@ h1 {
     background-color: #ffeb3b;
 }
 
-/* Time slot with IG icon */
+/* Time slot with IG icon and star */
 .time-slot {
     position: relative;
     background-color: #f9f9f9;
@@ -74,6 +74,17 @@ h1 {
     position: absolute;
     top: 5px;
     left: 5px;
+    background-image: url('Instagram-app-logo.png'); /* Use the local Instagram icon */
+    background-size: cover;
+}
+
+/* Star icon in time-slot for linked drama */
+.star-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: gold;
+    font-size: 18px;
 }
 
 /* Pop-up frame for description */
