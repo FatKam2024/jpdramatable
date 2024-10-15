@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         time: row.Time,
                         channel: row.Channel,
                         show: row.ProgramName,
-                        link: row.Link,
+                        link: row.Link || '', // Handle link
                         igLink: row.IG || '', // Handle missing IG links
                         description: row.Desc || '' // Handle missing descriptions
                     });
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
                         let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
                         let starHTML = slot.link ? `<span class="star-icon">★</span>` : '';
-                        return `<div class="time-slot" data-desc="${slot.description}">
+                        return `<div class="time-slot" data-link="${slot.link}" data-desc="${slot.description}">
                                     ${igHTML}
                                     ${starHTML}
                                     ${slot.time} ${slot.channel}<br>${slot.show}
@@ -70,11 +70,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Add hover events to show and hide the pop-up
                     dayColumn.querySelectorAll('.time-slot').forEach(slot => {
                         const description = slot.getAttribute('data-desc');
+                        const link = slot.getAttribute('data-link');
+                        
                         if (description) {
                             slot.addEventListener('mouseenter', function(e) {
                                 showPopUp(e, description);
                             });
                             slot.addEventListener('mouseleave', hidePopUp);
+                        }
+
+                        // If the cell has a link, make the entire cell clickable
+                        if (link) {
+                            slot.addEventListener('click', function(e) {
+                                // Prevent clicking on Instagram icon from triggering the cell's link
+                                if (!e.target.classList.contains('ig-icon')) {
+                                    window.open(link, '_blank');
+                                }
+                            });
                         }
                     });
                 }
