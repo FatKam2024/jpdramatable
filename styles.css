@@ -74,7 +74,6 @@ h1 {
     position: absolute;
     top: 5px;
     left: 5px;
-    background-image: url('Instagram-app-logo.png'); /* Use the local Instagram icon */
     background-size: cover;
 }
 
