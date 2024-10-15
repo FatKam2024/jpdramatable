@@ -40,7 +40,9 @@ h1 {
     background-color: #ffeb3b;
 }
 
+/* Time slot with IG icon */
 .time-slot {
+    position: relative;
     background-color: #f9f9f9;
     margin-bottom: 10px;
     padding: 10px;
@@ -65,7 +67,16 @@ h1 {
     color: #00796b;
 }
 
-/* Pop-up frame for IG and Description */
+/* Instagram icon in time-slot */
+.ig-icon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+/* Pop-up frame for description */
 .pop-up {
     position: absolute;
     display: none;
@@ -75,16 +86,6 @@ h1 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     max-width: 300px;
-}
-
-.pop-up img {
-    width: 100%;
-    height: auto;
-}
-
-.pop-up p {
-    margin-top: 10px;
-    font-size: 14px;
 }
 
 /* Resource Section */
