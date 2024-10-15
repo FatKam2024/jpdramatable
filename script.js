@@ -58,9 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dayColumn = document.getElementById(day);
                 if (dayColumn) {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
-                        let iconHTML = slot.igLink ? `<img src="instagram-icon.png" alt="IG" class="ig-icon">` : '';
+                        let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
+                        let starHTML = slot.link ? `<span class="star-icon">★</span>` : '';
                         return `<div class="time-slot" data-desc="${slot.description}">
-                                    ${iconHTML}
+                                    ${igHTML}
+                                    ${starHTML}
                                     ${slot.time} ${slot.channel}<br>${slot.show}
                                 </div>`;
                     }).join('');
