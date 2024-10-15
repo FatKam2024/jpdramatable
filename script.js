@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (dayColumn) {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
                         if (slot.link) {
-                            return `<div class="time-slot" style="background-color: #333;">
+                            return `<div class="time-slot" style="background-color: #ADD8E6;">
                                         <a href="${slot.link}" target="_blank" style="color: white;">${slot.time} ${slot.channel}<br>${slot.show}</a>
                                     </div>`;
                         } else {
