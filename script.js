@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (dayColumn) {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
                         if (slot.link) {
-                            return `<div class="time-slot" style="background-color: #ADD8E6;">
+                            return `<div class="time-slot linked-slot" style="background-color: #333;">
                                         <a href="${slot.link}" target="_blank" style="color: white;">${slot.time} ${slot.channel}<br>${slot.show}</a>
                                     </div>`;
                         } else {
-                            return `<div class="time-slot">
+                            return `<div class="time-slot" style="background-color: #f0f0f0;">
                                         ${slot.time} ${slot.channel}<br>${slot.show}
                                     </div>`;
                         }
