@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -39,31 +40,33 @@ h1 {
     background-color: #ffeb3b;
 }
 
+/* Base styles for time slots */
 .time-slot {
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
+    background-color: #f0f0f0; /* Default light gray for cells without a link */
     padding: 10px;
     border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.time-slot a {
+/* For cells with links, override the background color to dark gray */
+.linked-slot {
+    background-color: #333333; /* Dark gray for cells with links */
+}
+
+/* Mouse-over effect for all time slots (with or without links) */
+.time-slot:hover, .linked-slot:hover {
+    background-color: #ADD8E6; /* Change to light blue on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional: add a slight shadow */
+}
+
+/* Hover effect for cells with a link */
+.linked-slot a {
     text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: color 0.3s;
+    color: white;
 }
 
-.time-slot:hover {
-    background-color: #e0f7fa;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.time-slot:hover a {
-    color: #00796b;
-}
-
+/* Resource section styles */
 .resource-section {
     margin-top: 20px;
     padding: 10px;
