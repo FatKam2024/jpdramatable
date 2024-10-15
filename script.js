@@ -3,18 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     popUp.classList.add('pop-up');
     document.body.appendChild(popUp);
 
-    // Function to show pop-up with Instagram link
-    function showPopUp(e, igLink, description) {
-        let content = '';
-        if (igLink) {
-            content += `<a href="${igLink}" target="_blank">View Instagram Post</a>`;
-        } else {
-            content += `<p>No Instagram post available.</p>`;
-        }
-        if (description) {
-            content += `<p>${description}</p>`;
-        }
-        popUp.innerHTML = content;
+    // Function to show pop-up with description only
+    function showPopUp(e, description) {
+        popUp.innerHTML = `<p>${description}</p>`;
         popUp.style.display = 'block';
         popUp.style.top = e.pageY + 10 + 'px';
         popUp.style.left = e.pageX + 10 + 'px';
@@ -67,19 +58,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dayColumn = document.getElementById(day);
                 if (dayColumn) {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
-                        return `<div class="time-slot" data-ig="${slot.igLink}" data-desc="${slot.description}">
+                        let iconHTML = slot.igLink ? `<img src="instagram-icon.png" alt="IG" class="ig-icon">` : '';
+                        return `<div class="time-slot" data-desc="${slot.description}">
+                                    ${iconHTML}
                                     ${slot.time} ${slot.channel}<br>${slot.show}
                                 </div>`;
                     }).join('');
 
                     // Add hover events to show and hide the pop-up
                     dayColumn.querySelectorAll('.time-slot').forEach(slot => {
-                        slot.addEventListener('mouseenter', function(e) {
-                            const igLink = this.getAttribute('data-ig');
-                            const description = this.getAttribute('data-desc');
-                            showPopUp(e, igLink, description);
-                        });
-                        slot.addEventListener('mouseleave', hidePopUp);
+                        const description = slot.getAttribute('data-desc');
+                        if (description) {
+                            slot.addEventListener('mouseenter', function(e) {
+                                showPopUp(e, description);
+                            });
+                            slot.addEventListener('mouseleave', hidePopUp);
+                        }
                     });
                 }
             }
