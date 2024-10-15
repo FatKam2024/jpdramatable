@@ -1,12 +1,20 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     const popUp = document.createElement('div');
     popUp.classList.add('pop-up');
     document.body.appendChild(popUp);
 
-    // Function to show pop-up
+    // Function to show pop-up with Instagram link
     function showPopUp(e, igLink, description) {
-        popUp.innerHTML = `<img src="${igLink}" alt="Instagram Image"><p>${description}</p>`;
+        let content = '';
+        if (igLink) {
+            content += `<a href="${igLink}" target="_blank">View Instagram Post</a>`;
+        } else {
+            content += `<p>No Instagram post available.</p>`;
+        }
+        if (description) {
+            content += `<p>${description}</p>`;
+        }
+        popUp.innerHTML = content;
         popUp.style.display = 'block';
         popUp.style.top = e.pageY + 10 + 'px';
         popUp.style.left = e.pageX + 10 + 'px';
@@ -43,14 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             results.data.forEach(row => {
                 const day = row.Weekday;
-                if (day && row.Time && row.Channel && row.ProgramName && row.IG && row.Desc) {
+                if (day && row.Time && row.Channel && row.ProgramName) {
                     scheduleData[day].push({
                         time: row.Time,
                         channel: row.Channel,
                         show: row.ProgramName,
                         link: row.Link,
-                        igLink: row.IG,
-                        description: row.Desc
+                        igLink: row.IG || '', // Handle missing IG links
+                        description: row.Desc || '' // Handle missing descriptions
                     });
                 }
             });
