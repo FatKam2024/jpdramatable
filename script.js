@@ -1,6 +1,24 @@
+
 document.addEventListener('DOMContentLoaded', function() {
+    const popUp = document.createElement('div');
+    popUp.classList.add('pop-up');
+    document.body.appendChild(popUp);
+
+    // Function to show pop-up
+    function showPopUp(e, igLink, description) {
+        popUp.innerHTML = `<img src="${igLink}" alt="Instagram Image"><p>${description}</p>`;
+        popUp.style.display = 'block';
+        popUp.style.top = e.pageY + 10 + 'px';
+        popUp.style.left = e.pageX + 10 + 'px';
+    }
+
+    // Function to hide pop-up
+    function hidePopUp() {
+        popUp.style.display = 'none';
+    }
+
     // Highlight the current day column
-    const today = new Date().getDay(); // Sunday - Saturday : 0 - 6
+    const today = new Date().getDay();
     const dayMap = {
         0: 'day7', // Sunday
         1: 'day1', // Monday
@@ -20,41 +38,41 @@ document.addEventListener('DOMContentLoaded', function() {
         header: true,
         complete: function(results) {
             const scheduleData = {
-                day1: [],
-                day2: [],
-                day3: [],
-                day4: [],
-                day5: [],
-                day6: [],
-                day7: []
+                day1: [], day2: [], day3: [], day4: [], day5: [], day6: [], day7: []
             };
-            
+
             results.data.forEach(row => {
                 const day = row.Weekday;
-                if (day && row.Time && row.Channel && row.ProgramName) {
+                if (day && row.Time && row.Channel && row.ProgramName && row.IG && row.Desc) {
                     scheduleData[day].push({
                         time: row.Time,
                         channel: row.Channel,
                         show: row.ProgramName,
-                        link: row.Link
+                        link: row.Link,
+                        igLink: row.IG,
+                        description: row.Desc
                     });
                 }
             });
-            
+
             for (const day in scheduleData) {
                 const dayColumn = document.getElementById(day);
                 if (dayColumn) {
                     dayColumn.innerHTML += scheduleData[day].map(slot => {
-                        if (slot.link) {
-                            return `<div class="time-slot">
-                                        <a href="${slot.link}" target="_blank">${slot.time} ${slot.channel}<br>${slot.show} ★</a>
-                                    </div>`;
-                        } else {
-                            return `<div class="time-slot">
-                                        ${slot.time} ${slot.channel}<br>${slot.show}
-                                    </div>`;
-                        }
+                        return `<div class="time-slot" data-ig="${slot.igLink}" data-desc="${slot.description}">
+                                    ${slot.time} ${slot.channel}<br>${slot.show}
+                                </div>`;
                     }).join('');
+
+                    // Add hover events to show and hide the pop-up
+                    dayColumn.querySelectorAll('.time-slot').forEach(slot => {
+                        slot.addEventListener('mouseenter', function(e) {
+                            const igLink = this.getAttribute('data-ig');
+                            const description = this.getAttribute('data-desc');
+                            showPopUp(e, igLink, description);
+                        });
+                        slot.addEventListener('mouseleave', hidePopUp);
+                    });
                 }
             }
         }
