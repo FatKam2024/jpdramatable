@@ -69,21 +69,12 @@ h1 {
 
 /* Instagram icon in time-slot */
 .ig-icon {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     position: absolute;
-    top: 5px;
+    top: 10px;
     left: 5px;
     background-size: cover;
-}
-
-/* Star icon in time-slot for linked drama */
-.star-icon {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: gold;
-    font-size: 18px;
 }
 
 /* Transparent button below the image */
@@ -94,13 +85,11 @@ h1 {
     right: 0;
     width: 100%;
     height: 60px;  /* Button height */
-    background-color: rgba(128, 0, 128, 0.1);  /* Purple color with 50% transparency */
+    background-color: rgba(128, 0, 128, 0.1);  /* Purple color with transparency */
     border: none;
     cursor: pointer;
     z-index: 10;
 }
-
-
 
 /* Image in time slot */
 .slot-image {
@@ -157,39 +146,11 @@ h1 {
     cursor: pointer;
 }
 
-/* Resource Section */
-.resource-section {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .resource-section h2 {
     background-color: #ececec;
     padding: 10px;
     border-radius: 8px 8px 0 0;
     margin: -10px -10px 10px -10px;
-}
-
-.resource-section ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.resource-section ul li {
-    margin-bottom: 10px;
-}
-
-.resource-section ul li a {
-    text-decoration: none;
-    color: #00796b;
-    transition: color 0.3s;
-}
-
-.resource-section ul li a:hover {
-    color: #004d40;
 }
 
 /* Responsive Design */
@@ -233,13 +194,15 @@ h1 {
     .click-icon {
         width: 25px;
     }
+
 }
 
 /* Fix the resource section at the bottom while scrolling */
 .resource-section {
     position: fixed;
     bottom: 0;
-    width: 100%;
+	left: 5%;
+    width: 85%;
     background-color: white;
     padding: 10px;
     text-align: center;
@@ -286,8 +249,53 @@ h1 {
     color: #004d40;
 }
 
+/* TV icon style */
+.tv-icon {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    width: 55px;  /* Adjust the size as needed */
+    height: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.ig-icon-modal {
+    width: 30px;
+    height: 30px;
+}
+
+.tv-icon-modal {
+    width: 35px;
+    height: 35px;
+}
+
+.program-name {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.modal-description-text {
+    margin-top: 15px;
+    font-size: 16px;
+	text-align: left;
+}
+
+
 /* Smooth scroll behavior for back to top */
 html {
     scroll-behavior: smooth;
 }
+
 
