@@ -7,7 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script defer src="script.js"></script>
+
+    <!-- Force page refresh -->
+    <script type="text/javascript">
+        window.onload = function() {
+            if (!sessionStorage.getItem('reloaded')) {
+                sessionStorage.setItem('reloaded', 'true');
+                location.reload();
+            }
+        };
+    </script>
 </head>
+
 <body>
     <h1>2024 秋季日劇</h1>
     <div class="schedule-container">
