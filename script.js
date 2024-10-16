@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Supported image extensions
-    const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+    const imageExtensions = ['.jpg', '.png',  '.jpeg', '.gif'];
 
     // Function to check and load the correct image with extension
     function getImageSrc(imageName) {
