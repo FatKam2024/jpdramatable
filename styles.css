@@ -41,6 +41,10 @@ h1 {
     border-radius: 8px 8px 0 0;
 }
 
+.day-column.current-day {
+    background-color: #f7f3cd;
+}
+
 .day-column.current-day h2 {
     background-color: #ffeb3b;
 }
