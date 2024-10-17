@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Show loading overlay
+    document.getElementById('loadingOverlay').style.display = 'flex';
+
+    // Check if page needs to reload
+    if (!sessionStorage.getItem('reloaded')) {
+        sessionStorage.setItem('reloaded', 'true');
+        setTimeout(() => {
+            location.reload();
+        }, 1000); // Adjust the delay if needed
+    } else {
+        // Hide the loading overlay after a short delay
+        setTimeout(() => {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }, 500);
+    }
+});
+
+
+document.getElementById('refreshButton').addEventListener('click', function() {
+    location.reload();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
     // Create the modal for showing the image and description
     const modal = document.createElement('div');
     modal.classList.add('modal');
