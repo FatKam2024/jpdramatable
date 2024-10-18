@@ -22,6 +22,40 @@ document.getElementById('refreshButton').addEventListener('click', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Define the getImageSrc function to check and load the correct image with extension
+    function getImageSrc(imageName) {
+        const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+        for (let ext of imageExtensions) {
+            let imgSrc = `image/${imageName}${ext}`;
+            let img = new Image();
+            img.src = imgSrc;
+            if (img.complete) {
+                return imgSrc; // Return the correct image source if it exists
+            }
+        }
+        return ''; // Return empty if no image found
+    }
+
+    // Show loading overlay
+    document.getElementById('loadingOverlay').style.display = 'flex';
+
+    // Check if page needs to reload
+    if (!sessionStorage.getItem('reloaded')) {
+        sessionStorage.setItem('reloaded', 'true');
+        setTimeout(() => {
+            location.reload();
+        }, 1000); // Adjust the delay if needed
+    } else {
+        // Hide the loading overlay after a short delay
+        setTimeout(() => {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }, 500);
+    }
+
+    document.getElementById('refreshButton').addEventListener('click', function() {
+        location.reload();
+    });
+
     // Create the modal for showing the image and description
     const modal = document.createElement('div');
     modal.classList.add('modal');
@@ -39,9 +73,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeButton = document.querySelector('.close-button');
 
     // Function to show the modal
-    function showModal(imageSrc, description, programName, igLink, tvLink) {
+    function showModal(imageSrc, description, programName, igLink, tvLink, liveLink) {
         let igHTML = igLink ? `<a href="${igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon-modal"></a>` : '';
         let tvHTML = tvLink ? `<a href="${tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon-modal"></a>` : '';
+        let liveHTML = liveLink ? `<a href="${liveLink}" target="_blank"><img src="live.png" alt="Live Icon" class="live-icon-modal"></a>` : '';
 
         modalImage.src = imageSrc;
         modalDescription.innerHTML = `
@@ -49,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="modal-icons">
                     ${igHTML}
                     ${tvHTML}
+                    ${liveHTML}
                 </div>
                 <div class="program-name">${programName}</div>
             </div>
@@ -57,12 +93,18 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
     }
 
-    // Function to hide the modal
     function hideModal() {
         modal.style.display = 'none';
     }
 
     closeButton.addEventListener('click', hideModal);
+
+    // Event listener to close the modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            hideModal();
+        }
+    });
 
     // Highlight the current day column
     const today = new Date().getDay();
@@ -96,93 +138,84 @@ document.addEventListener('DOMContentLoaded', function() {
         return ''; // Return empty if no image found
     }
 
-	Papa.parse('schedule.csv', {
-		download: true,
-		header: true,
-		complete: function(results) {
-			const scheduleData = {
-				day1: [], day2: [], day3: [], day4: [], day5: [], day6: [], day7: []
-			};
+    Papa.parse('schedule.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            const scheduleData = {
+                day1: [], day2: [], day3: [], day4: [], day5: [], day6: [], day7: []
+            };
 
-			results.data.forEach(row => {
-				const day = row.Weekday;
-				if (day && row.Time && row.Channel && row.ProgramName) {
-					scheduleData[day].push({
-						time: row.Time,
-						channel: row.Channel,
-						show: row.ProgramName,
-						image: row.Image || '',  // Handle image
-						link: row.Link || '',    // Handle link
-						igLink: row.IG || '',    // Handle IG link
-						description: row.Desc || '',  // Handle description
-						tvLink: row.TV || '' // Handle TV link
-					});
-				}
-			});
+            results.data.forEach(row => {
+                const day = row.Weekday;
+                if (day && row.Time && row.Channel && row.ProgramName) {
+                    scheduleData[day].push({
+                        time: row.Time,
+                        channel: row.Channel,
+                        show: row.ProgramName,
+                        image: row.Image || '',
+                        link: row.Link || '',
+                        igLink: row.IG || '',
+                        description: row.Desc || '',
+                        tvLink: row.TV || ''
+                    });
+                }
+            });
 
-			for (const day in scheduleData) {
-				const dayColumn = document.getElementById(day);
-				if (dayColumn) {
-					dayColumn.innerHTML += scheduleData[day].map(slot => {
-						// **Always reset tvLink and link at the start**
-						let tvLink = '';   // Reset tvLink for each slot
-						let link = '';     // Reset link for each slot
+            for (const day in scheduleData) {
+                const dayColumn = document.getElementById(day);
+                if (dayColumn) {
+                    dayColumn.innerHTML += scheduleData[day].map(slot => {
+                        let imageSrc = slot.image ? getImageSrc(slot.image) : '';
+                        let imageHTML = imageSrc ? `<button class="image-button" data-image="${imageSrc}" data-desc="${slot.description}">
+                                                        <img src="${imageSrc}" alt="Image" class="slot-image">
+                                                    </button>` : '';
 
-						// Log slot processing to ensure debugging works
-						console.log(`Processing slot for ${slot.show}: link = ${slot.link}, tvLink = ${slot.tvLink}`);
+                        let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
+                        let tvHTML = slot.tvLink ? `<a href="${slot.tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon"></a>` : '';
+                        let liveHTML = slot.link ? `<a href="${slot.link}" target="_blank"><img src="live.png" alt="Live Icon" class="live-icon"></a>` : '';
 
-						// **Process the content as usual** 
-						let imageSrc = slot.image ? getImageSrc(slot.image) : '';
-						let imageHTML = imageSrc ? `<button class="image-button" data-image="${imageSrc}" data-desc="${slot.description}">
-														<img src="${imageSrc}" alt="Image" class="slot-image">
-													</button>` : '';
+                        // Keep the purple transparent button logic as before
+                        let transparentButtonHTML = slot.link ? `<button class="transparent-button" data-link="${slot.link}"></button>` : '';
 
-						let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';     
+                        return `<div class="time-slot" data-link="${slot.link}">
+                                    ${imageHTML}
+                                    ${igHTML}
+                                    ${tvHTML}
+                                    ${liveHTML}
+                                    ${slot.time} ${slot.channel}<br>${slot.show}
+                                    ${transparentButtonHTML}
+                                </div>`;
+                    }).join('');
 
-						// **Ensure that the transparent button is only created if `slot.link` exists**
-						let transparentButtonHTML = slot.link ? `<button class="transparent-button" data-link="${slot.link}"></button>` : '';  
+                    // Event listeners for image buttons
+                    dayColumn.querySelectorAll('.image-button').forEach(button => {
+                        const imageSrc = button.getAttribute('data-image');
+                        const description = button.getAttribute('data-desc');
+                        const programName = button.closest('.time-slot').querySelector('br').nextSibling.textContent.trim();
+                        const igLink = button.closest('.time-slot').querySelector('.ig-icon') ? button.closest('.time-slot').querySelector('.ig-icon').parentElement.href : '';
+                        const tvLink = button.closest('.time-slot').querySelector('.tv-icon') ? button.closest('.time-slot').querySelector('.tv-icon').parentElement.href : '';
+                        const liveLink = button.closest('.time-slot').dataset.link;
 
-						// **Ensure that the TV icon is only created if `slot.tvLink` exists**
-						tvLink = slot.tvLink ? `<a href="${slot.tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon"></a>` : '';
+                        button.addEventListener('click', function(e) {
+                            e.stopPropagation(); 
+                            e.preventDefault(); 
+                            showModal(imageSrc, description, programName, igLink, tvLink, liveLink);
+                        });
+                    });
 
-						return `<div class="time-slot" data-link="${slot.link}">
-									${imageHTML}
-									${igHTML}
-									${slot.time} ${slot.channel}<br>${slot.show}
-									${transparentButtonHTML}
-									${tvLink}  <!-- Only add tvLink if it exists -->
-								</div>`;
-					}).join('');
-
-					// **Handle image buttons and modal display as normal**
-					dayColumn.querySelectorAll('.image-button').forEach(button => {
-						const imageSrc = button.getAttribute('data-image');
-						const description = button.getAttribute('data-desc');
-						const programName = button.closest('.time-slot').querySelector('br').nextSibling.textContent.trim();
-						const igLink = button.closest('.time-slot').querySelector('.ig-icon') ? button.closest('.time-slot').querySelector('.ig-icon').parentElement.href : '';
-						const tvLink = button.closest('.time-slot').querySelector('.tv-icon') ? button.closest('.time-slot').querySelector('.tv-icon').parentElement.href : '';
-
-						button.addEventListener('click', function(e) {
-							e.stopPropagation(); 
-							e.preventDefault(); 
-							showModal(imageSrc, description, programName, igLink, tvLink);
-						});
-					});
-
-					// **Ensure that transparent buttons open the link only if it exists**
-					dayColumn.querySelectorAll('.transparent-button').forEach(button => {
-						const link = button.getAttribute('data-link');
-						if (link) { 
-							button.addEventListener('click', function(e) {
-								e.stopPropagation();
-								window.open(link, '_blank');
-							});
-						}
-					});
-				}
-			}
-
-		}
-	});
-
+                    // Event listeners for the transparent button
+                    dayColumn.querySelectorAll('.transparent-button').forEach(button => {
+                        const link = button.getAttribute('data-link');
+                        if (link) {
+                            button.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                window.open(link, '_blank');
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    });
 });
