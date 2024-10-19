@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
                         let tvHTML = slot.tvLink ? `<a href="${slot.tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon"></a>` : '';
-                        let liveHTML = slot.link ? `<a href="${slot.link}" target="_blank"><img src="live.png" alt="Live Icon" class="live-icon"></a>` : '';
+                        //let liveHTML = slot.link ? `<a href="${slot.link}" target="_blank"><img src="live.png" alt="Live Icon" class="live-icon"></a>` : '';
 
                         // Keep the purple transparent button logic as before
                         let transparentButtonHTML = slot.link ? `<button class="transparent-button" data-link="${slot.link}"></button>` : '';
@@ -182,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                     ${imageHTML}
                                     ${igHTML}
                                     ${tvHTML}
-                                    ${liveHTML}
                                     ${slot.time} ${slot.channel}<br>${slot.show}
                                     ${transparentButtonHTML}
                                 </div>`;
