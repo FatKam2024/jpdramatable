@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				let day = row.Weekday;
 
 				// Check if "特別節目" and map to "special" or handle undefined/invalid days
-				if (day === '特別節目') {
+				if (day === 'speical') {
 					day = 'special';
 				} else if (!scheduleData.hasOwnProperty(day)) {
 					// Skip any rows with invalid `Weekday` values
