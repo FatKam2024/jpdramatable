@@ -380,4 +380,14 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Style for 特別節目 column */
+#special {
+    background-color: #fff; /* Ensure background color matches the rest */
+}
 
+#special h2 {
+    background-color: #ececec; /* Match other headers */
+    margin: 0 -10px 10px;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+}

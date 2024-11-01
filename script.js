@@ -138,83 +138,96 @@ document.addEventListener('DOMContentLoaded', function() {
         return ''; // Return empty if no image found
     }
 
-    Papa.parse('schedule.csv', {
-        download: true,
-        header: true,
-        complete: function(results) {
-            const scheduleData = {
-                day1: [], day2: [], day3: [], day4: [], day5: [], day6: [], day7: []
-            };
+	Papa.parse('schedule.csv', {
+		download: true,
+		header: true,
+		complete: function(results) {
+			const scheduleData = {
+				day1: [], day2: [], day3: [], day4: [], day5: [], day6: [], day7: [], special: [] // Include "special"
+			};
 
-            results.data.forEach(row => {
-                const day = row.Weekday;
-                if (day && row.Time && row.Channel && row.ProgramName) {
-                    scheduleData[day].push({
-                        time: row.Time,
-                        channel: row.Channel,
-                        show: row.ProgramName,
-                        image: row.Image || '',
-                        link: row.Link || '',
-                        igLink: row.IG || '',
-                        description: row.Desc || '',
-                        tvLink: row.TV || ''
-                    });
-                }
-            });
+			results.data.forEach(row => {
+				let day = row.Weekday;
 
-            for (const day in scheduleData) {
-                const dayColumn = document.getElementById(day);
-                if (dayColumn) {
-                    dayColumn.innerHTML += scheduleData[day].map(slot => {
-                        let imageSrc = slot.image ? getImageSrc(slot.image) : '';
-                        let imageHTML = imageSrc ? `<button class="image-button" data-image="${imageSrc}" data-desc="${slot.description}">
-                                                        <img src="${imageSrc}" alt="Image" class="slot-image">
-                                                    </button>` : '';
+				// Check if "特別節目" and map to "special" or handle undefined/invalid days
+				if (day === '特別節目') {
+					day = 'special';
+				} else if (!scheduleData.hasOwnProperty(day)) {
+					// Skip any rows with invalid `Weekday` values
+					console.warn(`Skipping invalid day: ${day}`);
+					return;
+				}
 
-                        let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
-                        let tvHTML = slot.tvLink ? `<a href="${slot.tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon"></a>` : '';
-                        //let liveHTML = slot.link ? `<a href="${slot.link}" target="_blank"><img src="live.png" alt="Live Icon" class="live-icon"></a>` : '';
+				// Log each row being processed to verify structure
+				console.log(`Processing row for day: ${day}`, row);
 
-                        // Keep the purple transparent button logic as before
-                        let transparentButtonHTML = slot.link ? `<button class="transparent-button" data-link="${slot.link}"></button>` : '';
+				// Only push valid data entries
+				if (row.Time && row.Channel && row.ProgramName) {
+					scheduleData[day].push({
+						time: row.Time,
+						channel: row.Channel,
+						show: row.ProgramName,
+						image: row.Image || '',
+						link: row.Link || '',
+						igLink: row.IG || '',
+						description: row.Desc || '',
+						tvLink: row.TV || ''
+					});
+				}
+			});
 
-                        return `<div class="time-slot" data-link="${slot.link}">
-                                    ${imageHTML}
-                                    ${igHTML}
-                                    ${tvHTML}
-                                    ${slot.time} ${slot.channel}<br>${slot.show}
-                                    ${transparentButtonHTML}
-                                </div>`;
-                    }).join('');
 
-                    // Event listeners for image buttons
-                    dayColumn.querySelectorAll('.image-button').forEach(button => {
-                        const imageSrc = button.getAttribute('data-image');
-                        const description = button.getAttribute('data-desc');
-                        const programName = button.closest('.time-slot').querySelector('br').nextSibling.textContent.trim();
-                        const igLink = button.closest('.time-slot').querySelector('.ig-icon') ? button.closest('.time-slot').querySelector('.ig-icon').parentElement.href : '';
-                        const tvLink = button.closest('.time-slot').querySelector('.tv-icon') ? button.closest('.time-slot').querySelector('.tv-icon').parentElement.href : '';
-                        const liveLink = button.closest('.time-slot').dataset.link;
+			for (const day in scheduleData) {
+				const dayColumn = document.getElementById(day);
+				if (dayColumn) {
+					dayColumn.innerHTML += scheduleData[day].map(slot => {
+						let imageSrc = slot.image ? getImageSrc(slot.image) : '';
+						let imageHTML = imageSrc ? `<button class="image-button" data-image="${imageSrc}" data-desc="${slot.description}">
+														 <img src="${imageSrc}" alt="Image" class="slot-image">
+													 </button>` : '';
 
-                        button.addEventListener('click', function(e) {
-                            e.stopPropagation(); 
-                            e.preventDefault(); 
-                            showModal(imageSrc, description, programName, igLink, tvLink, liveLink);
-                        });
-                    });
+						let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
+						let tvHTML = slot.tvLink ? `<a href="${slot.tvLink}" target="_blank"><img src="tv.png" alt="TV Icon" class="tv-icon"></a>` : '';
+						let transparentButtonHTML = slot.link ? `<button class="transparent-button" data-link="${slot.link}"></button>` : '';
 
-                    // Event listeners for the transparent button
-                    dayColumn.querySelectorAll('.transparent-button').forEach(button => {
-                        const link = button.getAttribute('data-link');
-                        if (link) {
-                            button.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                window.open(link, '_blank');
-                            });
-                        }
-                    });
-                }
-            }
-        }
-    });
+						return `<div class="time-slot" data-link="${slot.link}">
+									${imageHTML}
+									${igHTML}
+									${tvHTML}
+									${slot.time} ${slot.channel}<br>${slot.show}
+									${transparentButtonHTML}
+								</div>`;
+					}).join('');
+
+					// Event listeners for image buttons
+					dayColumn.querySelectorAll('.image-button').forEach(button => {
+						const imageSrc = button.getAttribute('data-image');
+						const description = button.getAttribute('data-desc');
+						const programName = button.closest('.time-slot').querySelector('br').nextSibling.textContent.trim();
+						const igLink = button.closest('.time-slot').querySelector('.ig-icon') ? button.closest('.time-slot').querySelector('.ig-icon').parentElement.href : '';
+						const tvLink = button.closest('.time-slot').querySelector('.tv-icon') ? button.closest('.time-slot').querySelector('.tv-icon').parentElement.href : '';
+						const liveLink = button.closest('.time-slot').dataset.link;
+
+						button.addEventListener('click', function(e) {
+							e.stopPropagation(); 
+							e.preventDefault(); 
+							showModal(imageSrc, description, programName, igLink, tvLink, liveLink);
+						});
+					});
+
+					// Event listeners for the transparent button
+					dayColumn.querySelectorAll('.transparent-button').forEach(button => {
+						const link = button.getAttribute('data-link');
+						if (link) {
+							button.addEventListener('click', function(e) {
+								e.stopPropagation();
+								window.open(link, '_blank');
+							});
+						}
+					});
+				}
+			}
+		}
+	});
+
 });
