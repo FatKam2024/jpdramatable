@@ -149,22 +149,18 @@ document.addEventListener('DOMContentLoaded', function() {
 			results.data.forEach(row => {
 				let day = row.Weekday;
 
-				// Check if "特別節目" and map to "special" or handle undefined/invalid days
-				if (day === 'speical') {
+				if (day === '特別節目') {
 					day = 'special';
 				} else if (!scheduleData.hasOwnProperty(day)) {
-					// Skip any rows with invalid `Weekday` values
 					console.warn(`Skipping invalid day: ${day}`);
 					return;
 				}
 
-				// Log each row being processed to verify structure
-				console.log(`Processing row for day: ${day}`, row);
-
-				// Only push valid data entries
 				if (row.Time && row.Channel && row.ProgramName) {
+					let timeText = row.Time.includes('深夜') ? '<span class="highlight">深夜</span>' : row.Time;
+					
 					scheduleData[day].push({
-						time: row.Time,
+						time: timeText,
 						channel: row.Channel,
 						show: row.ProgramName,
 						image: row.Image || '',
@@ -183,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					dayColumn.innerHTML += scheduleData[day].map(slot => {
 						let imageSrc = slot.image ? getImageSrc(slot.image) : '';
 						let imageHTML = imageSrc ? `<button class="image-button" data-image="${imageSrc}" data-desc="${slot.description}">
-														 <img src="${imageSrc}" alt="Image" class="slot-image">
+														<img src="${imageSrc}" alt="Image" class="slot-image">
 													 </button>` : '';
 
 						let igHTML = slot.igLink ? `<a href="${slot.igLink}" target="_blank"><img src="Instagram-app-logo.png" alt="IG" class="ig-icon"></a>` : '';
@@ -198,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
 									${transparentButtonHTML}
 								</div>`;
 					}).join('');
-
 					// Event listeners for image buttons
 					dayColumn.querySelectorAll('.image-button').forEach(button => {
 						const imageSrc = button.getAttribute('data-image');
