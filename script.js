@@ -157,8 +157,10 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 
 				if (row.Time && row.Channel && row.ProgramName) {
-					let timeText = row.Time.includes('深夜') ? '<span class="highlight">深夜</span>' : row.Time;
-					
+					// Check if Time is not in timestamp format
+					const timestampRegex = /^\d{2}:\d{2}$/; // Matches "HH:mm" format
+					let timeText = timestampRegex.test(row.Time) ? row.Time : `<span class="highlight">${row.Time}</span>`;
+
 					scheduleData[day].push({
 						time: timeText,
 						channel: row.Channel,
@@ -171,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
 					});
 				}
 			});
-
 
 			for (const day in scheduleData) {
 				const dayColumn = document.getElementById(day);
